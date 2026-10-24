@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f8f6">
+<title>Log4Money · Dashboard</title><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="css/style.css"></head>
+<body><div class="app-shell"><aside class="sidebar" id="side"></aside><div class="content"><header class="topbar" id="top"></header>
+<main class="main"><div class="page-head" id="phead"></div>
+<section class="hero" id="hero"></section>
+<section class="kpi-grid" id="kpis"></section>
+<section class="grid g21"><div class="panel"><div class="panel__head"><h3>Arus kas harian</h3><span class="tag" id="rl"></span></div><div class="cv"><canvas id="cf"></canvas></div></div>
+<div class="panel"><div class="panel__head"><h3>Pengeluaran per kategori</h3></div><div class="cv sm"><canvas id="dn"></canvas></div><div class="legend" id="lg"></div></div></section>
+<section class="grid g11"><div class="panel"><div class="panel__head"><h3>Anggaran bulan ini</h3><a class="link" href="budget.html">Atur</a></div><div id="bud"></div></div>
+<div class="panel"><div class="panel__head"><h3>Kata pelatih</h3></div><div class="ins" id="ins"></div></div></section>
+<section class="panel"><div class="panel__head"><h3>Transaksi terbaru</h3><a class="link" href="transactions.html">Lihat semua</a></div><div class="list" id="recent"></div></section>
+</main></div></div><nav class="bottomnav" id="bottom"></nav><div id="modal"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/sample.js"></script><script src="js/core.js"></script><script src="js/dashboard.js"></script></body></html>

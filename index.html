@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f8f6">
+<title>Log4Money · Kendali keuangan pribadi</title><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="css/style.css"></head>
+<body><div class="wl">
+<header><a class="brand" href="index.html"><img src="assets/logo.png" alt="Log4Money"><div class="brand__text">Log4Money<span>Kendali keuangan pribadi</span></div></a><a class="btn" href="dashboard.html">Buka dashboard</a></header>
+<main><div><span class="chip">Setiap rupiah tercatat</span><h1><span>Kendali</span> <span>penuh</span> <span>atas</span> <span>keuanganmu.</span></h1><p class="lead">Catat lewat Telegram, lihat hasilnya di sini: saldo, arus kas, anggaran, dan target tabungan dalam satu tempat.</p>
+<div class="cta"><a class="btn primary" href="dashboard.html">Masuk ke dashboard</a><a class="btn" href="transactions.html">Lihat transaksi</a></div>
+<div class="feats"><div><b>Otomatis</b>Data langsung dari spreadsheet-mu.</div><div><b>Mendalam</b>Tren bulanan, pola waktu, dan perbandingan.</div><div><b>Terkontrol</b>Batas anggaran dan target tabungan.</div></div></div>
+<div class="pv">
+<span class="chip">Papan skor</span><div class="big shine" id="pb">Rp 0</div><div class="rows" id="pr"></div><div class="spark" id="sp" aria-hidden="true"></div></div></main>
+<footer>Dibuat untuk dipakai sendiri.</footer></div>
+<script src="js/sample.js"></script><script src="js/core.js"></script>
+<script>$('#pr').insertAdjacentHTML('beforebegin',pitchSVG());wirePitch();Data.load().then(d=>{const T=totals(d.rows),mk=(l,v,c)=>`<div><span style="color:${c}">●</span> ${l}<b>${rp(v)}</b></div>`;countTo($('#pb'),T.saldo);
+$('#pr').innerHTML=mk('Pemasukan',T.i,JC.Pemasukan)+mk('Pengeluaran',T.o,JC.Pengeluaran)+mk('Tabungan',T.t,JC.Tabungan)+mk('Investasi',T.v,JC.Investasi);
+const end=sod(new Date(Math.max(...d.rows.map(r=>r.d)))),v=[];for(let i=13;i>=0;i--){const k=dkey(new Date(end.getFullYear(),end.getMonth(),end.getDate()-i));v.push(sum(by(d.rows.filter(r=>dkey(r.d)===k),'Pengeluaran')))}
+const m=Math.max(...v,1);$('#sp').innerHTML=v.map((x,k)=>`<i style="height:${Math.max(6,x/m*100)}%;--k:${k}"></i>`).join('')})</script></body></html>
