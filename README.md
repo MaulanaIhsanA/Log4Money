@@ -7,4 +7,6 @@ Website keuangan pribadi (terang, multi-halaman): Sambutan, Dashboard, Transaksi
 2. Push folder ke GitHub, Import di Vercel (Framework: Other, tanpa build command).
 3. Vercel > Environment Variables: `APPS_SCRIPT_URL` (URL /exec) dan `DASH_KEY` (opsional, samakan dengan Properti skrip). Redeploy.
 
+Opsional: tambah `DASH_PIN` di Environment Variables untuk mengunci website dengan kode (data baru keluar kalau kode benar). Tanpa `DASH_PIN`, website terbuka untuk siapa pun yang tahu linknya.
+
 Tanpa langkah 3, situs memakai data contoh. Klik logo di mana pun untuk kembali ke halaman sambutan.

@@ -21,11 +21,12 @@ function group(rows, fn) { const m = {}; rows.forEach(r => (m[fn(r)] = m[fn(r)] 
 function catSpend(rows) { const g = group(by(rows, 'Pengeluaran'), r => r.kategori); return Object.entries(g).map(([k, a]) => [k, sum(a)]).sort((a, b) => b[1] - a[1]); }
 function delta(cur, prev, upGood) { if (!prev) return ''; const p = (cur - prev) / prev * 100, up = p >= 0; return `<span class="delta ${up === upGood ? 'good' : 'bad'}">${up ? '▲' : '▼'} ${Math.abs(p).toFixed(0)}%</span>`; }
 
+const Lock = { get: () => localStorage.getItem('l4.pin') || sessionStorage.getItem('l4.pin') || '', set(p, keep) { (keep ? localStorage : sessionStorage).setItem('l4.pin', p); }, clear() { localStorage.removeItem('l4.pin'); sessionStorage.removeItem('l4.pin'); sessionStorage.removeItem('l4.cache'); } };
 const Data = {
   async load(force) {
     try { const c = JSON.parse(sessionStorage.getItem('l4.cache') || 'null'); if (!force && c && Date.now() - c.t < 60000) return Data.wrap(c.rows, c.live); } catch (e) {}
     let rows = SAMPLE, live = false;
-    try { const r = await fetch('/api/data', { cache: 'no-store' }), j = await r.json(); if (r.ok && Array.isArray(j)) { rows = j; live = true; } } catch (e) {}
+    try { const r = await fetch('/api/data', { cache: 'no-store', headers: { 'x-pin': Lock.get() } }); if (r.status === 401) { const had = !!Lock.get(); Lock.clear(); return { locked: true, wrong: had, rows: [], live: false }; } const j = await r.json(); if (r.ok && Array.isArray(j)) { rows = j; live = true; } } catch (e) {}
     try { sessionStorage.setItem('l4.cache', JSON.stringify({ t: Date.now(), rows, live })); } catch (e) {}
     return Data.wrap(rows, live);
   },
@@ -66,9 +67,18 @@ const STATE = { d: null };
 function mount(c) {
   const links = cls => NAV.map(([k, t]) => `<a class="${cls}${c.page === k ? ' on' : ''}" href="${k}.html">${svg(k)}${t}</a>`).join('');
   const brand = `<a class="brand" href="index.html" aria-label="Kembali ke halaman sambutan"><img src="assets/logo.png" alt="Log4Money"><div class="brand__text">Log4Money<span>Kendali keuangan pribadi</span></div></a>`;
-  $('#side').innerHTML = brand + `<nav class="nav">${links('nav__link')}</nav><div class="sp"></div><div class="sync" id="sync"><svg class="bs" viewBox="-12 -12 24 24">${BALL}</svg><span>Memuat…</span></div>`;
+  $('#side').innerHTML = brand + `<nav class="nav">${links('nav__link')}</nav><div class="sp"></div>${Lock.get() ? '<button class="btn" id="lockbtn" type="button" style="margin-bottom:10px">Kunci</button>' : ''}<div class="sync" id="sync"><svg class="bs" viewBox="-12 -12 24 24">${BALL}</svg><span>Memuat…</span></div>`;
+  const lb = $('#lockbtn'); if (lb) lb.onclick = () => { Lock.clear(); location.href = 'index.html'; };
   $('#top').innerHTML = brand; $('#bottom').innerHTML = links('');
   $('#phead').innerHTML = `<div><h1>${c.title}</h1><p>${c.sub}</p></div><div class="tools">${c.noRange ? '' : `<select class="select" id="range" aria-label="Periode">${Range.opts.map(o => `<option value="${o[0]}"${o[0] === Range.get() ? ' selected' : ''}>${o[1]}</option>`).join('')}</select>`}<button class="btn" id="refresh" type="button">Muat ulang</button></div>`;
+}
+function askPin(wrong) {
+  return new Promise(res => {
+    const o = document.createElement('div'); o.className = 'lock';
+    o.innerHTML = `<form class="lockc"><img src="assets/logo.png" alt=""><h2>Log4Money terkunci</h2><p>Masukkan kodemu untuk membuka.</p><input class="input" id="pin" type="password" autocomplete="current-password" placeholder="Kode akses" aria-label="Kode akses" required><div class="lerr" role="alert">${wrong ? 'Kode salah, coba lagi.' : ''}</div><label class="keep"><input type="checkbox" id="keep"> Ingat di perangkat ini</label><button class="btn primary" style="width:100%">Buka</button></form>`;
+    document.body.appendChild(o); $('#pin').focus();
+    $('form', o).onsubmit = async e => { e.preventDefault(); const b = $('button', o); b.classList.add('busy'); Lock.set($('#pin').value, $('#keep').checked); const d = await Data.load(true); b.classList.remove('busy'); if (d.locked) { $('.lerr', o).textContent = 'Kode salah, coba lagi.'; $('#pin').value = ''; $('#pin').focus(); } else { o.remove(); res(d); } };
+  });
 }
 function openModal(html) {
   const m = $('#modal'); m.innerHTML = `<div class="ov"><div class="modal" role="dialog" aria-modal="true">${html}<div style="display:flex;justify-content:flex-end"><button class="btn" id="mclose" type="button">Tutup</button></div></div></div>`;
@@ -106,7 +116,7 @@ function countTo(el, to) { const t0 = performance.now(); (function f(t) { const 
 async function boot(c) {
   mount(c);
   $$('.kpi-grid').forEach(e => e.innerHTML = '<div class="skel"></div>'.repeat(6)); const h = $('#hero'); if (h) h.innerHTML = '<div class="skel" style="min-height:200px;grid-column:1/-1"></div>';
-  const go = async f => { const d = await Data.load(f); STATE.d = d; const s = $('#sync'); s.className = 'sync' + (d.live ? ' live' : ''); s.innerHTML = '<i></i><span>' + (d.live ? 'Terhubung ke spreadsheet' : 'Memakai data contoh') + '</span>'; c.render(d); };
+  const go = async f => { let d = await Data.load(f); if (d.locked) d = await askPin(d.wrong); if (Lock.get() && !$('#lockbtn') && $('.sp')) { $('.sp').insertAdjacentHTML('afterend', '<button class="btn" id="lockbtn" type="button" style="margin-bottom:10px">Kunci</button>'); $('#lockbtn').onclick = () => { Lock.clear(); location.href = 'index.html'; }; } STATE.d = d; const s = $('#sync'); s.className = 'sync' + (d.live ? ' live' : ''); s.innerHTML = '<i></i><span>' + (d.live ? 'Terhubung ke spreadsheet' : 'Memakai data contoh') + '</span>'; c.render(d); };
   const r = $('#range'); if (r) r.onchange = e => { Range.set(e.target.value); c.render(STATE.d); };
   $('#refresh').onclick = async e => { const b = e.currentTarget; b.classList.add('busy'); await go(true); b.classList.remove('busy'); };
   await go(false);

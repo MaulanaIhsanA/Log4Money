@@ -152,3 +152,8 @@ h1,h2,h3{font-family:var(--fd);margin:0;letter-spacing:-.01em}p{margin:0}a{color
 .chip{position:relative;overflow:hidden}.chip::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.8) 50%,transparent 70%);transform:translateX(-120%);animation:glint 2.6s 1.2s ease-in-out 1 both}@keyframes glint{to{transform:translateX(120%)}}
 .nav__link.on svg{animation:pop .5s var(--ease) both}
 @media(max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}.pitch{height:160px;min-height:0}}
+/* layar kunci */
+.lock{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(245,248,246,.82);backdrop-filter:blur(14px);animation:fade .3s}
+.lockc{width:min(360px,100%);background:#fff;border:1px solid var(--border);border-radius:var(--r3);padding:28px 24px;display:grid;gap:12px;justify-items:center;text-align:center;box-shadow:var(--sh2);animation:rise .5s var(--ease) both}
+.lockc img{width:52px;height:52px;border-radius:14px;border:1px solid var(--border)}.lockc p{color:var(--ink2);margin-top:-6px}.lockc .input{width:100%;text-align:center;letter-spacing:.2em;font-size:16px}
+.lerr{min-height:20px;color:var(--red);font-size:13px;font-weight:600}.keep{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink2)}

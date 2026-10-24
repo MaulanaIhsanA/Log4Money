@@ -10,7 +10,7 @@
 <span class="chip">Papan skor</span><div class="big shine" id="pb">Rp 0</div><div class="rows" id="pr"></div><div class="spark" id="sp" aria-hidden="true"></div></div></main>
 <footer>Dibuat untuk dipakai sendiri.</footer></div>
 <script src="js/sample.js"></script><script src="js/core.js"></script>
-<script>$('#pr').insertAdjacentHTML('beforebegin',pitchSVG());wirePitch();Data.load().then(d=>{const T=totals(d.rows),mk=(l,v,c)=>`<div><span style="color:${c}">●</span> ${l}<b>${rp(v)}</b></div>`;countTo($('#pb'),T.saldo);
+<script>$('#pr').insertAdjacentHTML('beforebegin',pitchSVG());wirePitch();Data.load().then(d=>{if(d.locked){$('#pb').textContent='Rp ••••••';$('#pr').innerHTML='<div style="grid-column:1/-1">Terkunci. Kamu akan diminta kode saat masuk ke dashboard.</div>';return}const T=totals(d.rows),mk=(l,v,c)=>`<div><span style="color:${c}">●</span> ${l}<b>${rp(v)}</b></div>`;countTo($('#pb'),T.saldo);
 $('#pr').innerHTML=mk('Pemasukan',T.i,JC.Pemasukan)+mk('Pengeluaran',T.o,JC.Pengeluaran)+mk('Tabungan',T.t,JC.Tabungan)+mk('Investasi',T.v,JC.Investasi);
 const end=sod(new Date(Math.max(...d.rows.map(r=>r.d)))),v=[];for(let i=13;i>=0;i--){const k=dkey(new Date(end.getFullYear(),end.getMonth(),end.getDate()-i));v.push(sum(by(d.rows.filter(r=>dkey(r.d)===k),'Pengeluaran')))}
 const m=Math.max(...v,1);$('#sp').innerHTML=v.map((x,k)=>`<i style="height:${Math.max(6,x/m*100)}%;--k:${k}"></i>`).join('')})</script></body></html>
