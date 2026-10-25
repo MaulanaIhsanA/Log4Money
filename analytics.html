@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f8f6">
-<title>Log4Money · Analitik</title><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="css/style.css"></head>
-<body><div class="app-shell"><aside class="sidebar" id="side"></aside><div class="content"><header class="topbar" id="top"></header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f8f6">
+<title>Log4Money · Analytics</title><meta name="description" content="Log4Money: a private personal finance dashboard fed by a Telegram bot and Google Sheets."><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="css/style.css"></head>
+<body data-title="Analytics"><div class="app-shell"><aside class="sidebar" id="side"></aside><div class="content"><header class="topbar" id="top"></header>
 <main class="main"><div class="page-head" id="phead"></div>
-<section class="grid g21"><div class="panel"><div class="panel__head"><h3>Pemasukan vs pengeluaran per bulan</h3><span class="tag">Semua data</span></div><div class="cv"><canvas id="mo"></canvas></div></div>
-<div class="panel"><div class="panel__head"><h3>Babak belanja (waktu pengeluaran)</h3></div><div class="cv"><canvas id="hr"></canvas></div></div></section>
-<section class="grid g11"><div class="panel"><div class="panel__head"><h3>Saldo kumulatif</h3><span class="tag" id="rl"></span></div><div class="cv sm"><canvas id="cu"></canvas></div></div>
-<div class="panel"><div class="panel__head"><h3>Rata-rata pengeluaran per hari</h3></div><div class="cv sm"><canvas id="wd"></canvas></div></div></section>
-<section class="grid g11"><div class="panel"><div class="panel__head"><h3>Kategori terbesar</h3></div><div id="cat"></div></div>
-<div class="panel"><div class="panel__head"><h3>Top skor: pengeluaran terbesar</h3></div><div class="list" id="top5"></div></div></section>
-<section class="panel"><div class="panel__head"><h3>Bulan ini dibanding bulan lalu</h3><span class="tag">Per kategori</span></div><div id="mom"></div></section>
+<section class="grid g21"><div class="panel"><div class="panel__head"><h3 data-t="Income vs expenses by month">Income vs expenses by month</h3><span class="tag" data-t="All data">All data</span></div><div class="cv"><canvas id="mo"></canvas></div></div>
+<div class="panel"><div class="panel__head"><h3 data-t="When you spend">When you spend</h3></div><div class="cv"><canvas id="hr"></canvas></div></div></section>
+<section class="grid g11"><div class="panel"><div class="panel__head"><h3 data-t="Cumulative balance">Cumulative balance</h3><span class="tag" id="rl"></span></div><div class="cv sm"><canvas id="cu"></canvas></div></div>
+<div class="panel"><div class="panel__head"><h3 data-t="Average spend by weekday">Average spend by weekday</h3></div><div class="cv sm"><canvas id="wd"></canvas></div></div></section>
+<section class="grid g11"><div class="panel"><div class="panel__head"><h3 data-t="Top categories">Top categories</h3></div><div id="cat"></div></div>
+<div class="panel"><div class="panel__head"><h3 data-t="Largest expenses">Largest expenses</h3></div><div class="list" id="top5"></div></div></section>
+<section class="panel"><div class="panel__head"><h3 data-t="This month vs last month">This month vs last month</h3><span class="tag" data-t="By category">By category</span></div><div id="mom"></div></section>
 </main></div></div><nav class="bottomnav" id="bottom"></nav><div id="modal"></div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="js/sample.js"></script><script src="js/core.js"></script><script src="js/analytics.js"></script></body></html>
+<script src="js/i18n.js"></script><script src="js/sample.js"></script><script src="js/core.js"></script><script src="js/analytics.js"></script></body></html>
